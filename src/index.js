@@ -46,14 +46,16 @@ app.post("/webhook/position", async (req, res) => {
       if (req.body.action == "sell") {
         const res_sell = await binance_api.futuresMarketSell(
           req.body.market,
-          Math.round(parseFloat(req.body.size))
+          parseFloat(req.body.size),
+          {reduceOnly: req.body.reduceOnly}
         );
         console.log(res_sell);
       }
       if (req.body.action == "buy") {
         const res_buy = await binance_api.futuresMarketBuy(
           req.body.market,
-          Math.round(parseFloat(req.body.size))
+          parseFloat(req.body.size),
+          {reduceOnly: req.body.reduceOnly}
         );
         console.log(res_buy);
       }
