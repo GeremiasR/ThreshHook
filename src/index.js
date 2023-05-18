@@ -40,6 +40,12 @@ app.post("/configure", async (req, res) => {
 });
 
 app.post("/webhook/position", async (req, res) => {
+  var reduceOnly
+  if(parseInt(req.body.reduceOnly) == 1){
+    reduceOnly = true
+  }else if(parseInt(req.body.reduceOnly) == 0){
+    reduceOnly = false
+  }
   if (req.body.code && req.body.code == process.env.CODE) {
     try {
       console.log(req.body);
@@ -47,7 +53,7 @@ app.post("/webhook/position", async (req, res) => {
         const res_sell = await binance_api.futuresMarketSell(
           req.body.market,
           parseFloat(req.body.size),
-          {reduceOnly: req.body.reduceOnly}
+          {reduceOnly: reduceOnly}
         );
         console.log(res_sell);
       }
@@ -55,7 +61,7 @@ app.post("/webhook/position", async (req, res) => {
         const res_buy = await binance_api.futuresMarketBuy(
           req.body.market,
           parseFloat(req.body.size),
-          {reduceOnly: req.body.reduceOnly}
+          {reduceOnly: reduceOnly}
         );
         console.log(res_buy);
       }
