@@ -40,29 +40,25 @@ app.post("/configure", async (req, res) => {
 });
 
 app.post("/webhook/position", async (req, res) => {
-  var reduceOnly
+  /*var reduceOnly
   if(parseInt(req.body.reduceOnly) == 1){
     reduceOnly = true
   }else if(parseInt(req.body.reduceOnly) == 0){
     reduceOnly = false
-  }
+  }*/
   if (req.body.code && req.body.code == process.env.CODE) {
     try {
       console.log(req.body);
       if (req.body.action == "sell") {
         const res_sell = await binance_api.futuresMarketSell(
           req.body.market,
-          parseFloat(req.body.size),
-          {reduceOnly: reduceOnly}
-        );
+          Math.abs(parseFloat(req.body.size)));
         console.log(res_sell);
       }
       if (req.body.action == "buy") {
         const res_buy = await binance_api.futuresMarketBuy(
           req.body.market,
-          parseFloat(req.body.size),
-          {reduceOnly: reduceOnly}
-        );
+          Math.abs(parseFloat(req.body.size)));
         console.log(res_buy);
       }
       res.status(200).json({ status: "ok", message: "Order Placed" });
